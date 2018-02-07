@@ -64,27 +64,27 @@ typedef Matrix3D<float>         Img_f;
 typedef Matrix3D<int>           Img_i;
 
 enum BorderType {
-	CYCLE, REPLICATE, ZEROFILL
+    CYCLE, REPLICATE, ZEROFILL
 };
 template <typename type_des, typename type_src, typename type_app> 
 Matrix3D<type_des> filter2D(const Matrix3D<type_src> &img, 
-							const Matrix3D<type_app> &filter, 
-							BorderType border_type) {
-	int winsize_x = filter.width;
-	int winsize_y = filter.height;
-	int center_x  = winsize_x / 2; 
-	int center_y  = winsize_y / 2;
-	int width = img.width;
-	int height = img.height;
-	int channels = img.channels;   
+                            const Matrix3D<type_app> &filter, 
+                            BorderType border_type) {
+    int winsize_x = filter.width;
+    int winsize_y = filter.height;
+    int center_x  = winsize_x / 2; 
+    int center_y  = winsize_y / 2;
+    int width = img.width;
+    int height = img.height;
+    int channels = img.channels;   
 
-	Matrix3D<type_des> res(width, height, channels);
+    Matrix3D<type_des> res(width, height, channels);
 
     bool single_filter = (filter.channels == 1);
 
     INVOKE_MULTI_THREADS(height, start, end, {
-	for (int y = start; y < end; ++y)
-		for (int x = 0; x < width; ++x)
+    for (int y = start; y < end; ++y)
+        for (int x = 0; x < width; ++x)
             for (int c = 0; c < channels; ++c) { 
                 type_app r = 0; 
                 for (int i = 0; i < winsize_x; ++i)
