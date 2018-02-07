@@ -29,8 +29,8 @@ int main(int argc, char **argv) {
 
     HarrisDetector *harris = new HarrisDetector(SHI_TOMASI, 5);
     FASTDetector   *fast   = new FASTDetector(9, 20);
-    CSSDetector    *css    = new CSSDetector(0, 0);
-
+    CSSDetector    *css    = new CSSDetector(50, 150); // better
+    //CSSDetector    *css    = new CSSDetector(0, 0);
     std::vector<KeyPoint> keypoints;
     
     //std::cerr << harris->detect(gray, &keypoints) << std::endl;
@@ -40,5 +40,5 @@ int main(int argc, char **argv) {
         mark_keypoint_with_r3(img, keypoints[i], GREEN);
     }
 
-    stbi_write_bmp("test-marked.bmp", width, height, 3, img.data);
+    stbi_write_png("test-marked.png", width, height, 3, img.data, 0);
 }

@@ -140,11 +140,15 @@ std::vector<Contour> findContours(const Img &isEdgeInput) {
                     BDCHK(tx, ty);
 
                     idr = y*width+x, ids = ty*width+tx;    
-                    if (edge[idr][0] != 1)
+                    if (edge[idr][0] != 1 || edge[ids][0] != 1)
                         continue;
-
-                    if (std::max(abs(tx - x), abs(ty - y)) <= 1)
+                    if (idr == ids)
                         continue;
+                    if (std::max(abs(tx - x), abs(ty - y)) <= 1) {
+                        edge[ids][++edge[ids][0]] = idr;
+                        edge[idr][++edge[idr][0]] = ids;
+                        continue;
+                    }
 
                     int dx = (tx + x) / 2;
                     int dy = (ty + y) / 2;

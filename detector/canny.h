@@ -76,7 +76,6 @@ Img canny(const Img &gray,
         threshold_high = 1.33 * sum / height / width;
         threshold_low  = 0.67 * sum / height / width;
     }
-
     if (canny_norm == L2) {
         threshold_low  = threshold_low  * threshold_low; 
         threshold_high = threshold_high * threshold_high;

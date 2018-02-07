@@ -20,7 +20,7 @@ public:
         static int dx[8] = {1, 1, 0, -1, -1, -1, 0, 1};
         static int dy[8] = {0, 1, 1,  1,  0, -1,-1,-1};
 
-        int gauss_size = 3;
+        int gauss_size = 5;
 
         int width = gray.width;
         int height = gray.height;
@@ -28,10 +28,10 @@ public:
         // smooth
         // a non-trival kernel will produce double edges and CSS corners may be duplicated
 
-        Img smooth = gaussian<unsigned char>(gray, gauss_size, gauss_size, 1);
+        Img smooth = gaussian<unsigned char>(gray, gauss_size, gauss_size, 1.4);
 
         // extract edges
-        Img isEdge = canny(smooth, th_low, th_high);
+        Img isEdge = canny(smooth, th_low, th_high, L1, SOBEL);
         smooth.release();
 
         // find contours
@@ -50,6 +50,8 @@ public:
             }
         }
         for (int i = 0; i < contours.size(); ++i) {
+            if (contours[i].type != CLOSED)
+                continue;
             Img temp(width, height);
             for (int y = 0; y < height; ++y)
                 for (int x = 0; x < width; ++x)
@@ -65,7 +67,7 @@ public:
         stbi_write_bmp("canny_ctrs.bmp", width, height, 1, ctrs.data);
         stbi_write_bmp("canny.bmp", width, height, 1, isEdge.data);
         */
-
+        
         // find T corners
         std::vector<KeyPoint> Tcorners = findTcorners(isEdge, contours);
         std::vector<KeyPoint> CSScorners; CSScorners.clear();
